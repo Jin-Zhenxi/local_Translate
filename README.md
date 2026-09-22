@@ -77,13 +77,33 @@ models/
 └── opus-mt-en-zh-int8/
 ```
 
-`models/` 被 Git 忽略。仅执行 `git clone` 不会得到模型，迁移机器时必须单独复制这两个运行模型目录。
+两个运行模型目录通过 Git LFS 分发。安装 Git LFS 后执行 `git clone`，模型会随仓库自动获取；如果仓库已经 clone 但模型目录为空，可执行 `git lfs pull`。
 
-模型转换期间产生的目录不需要迁移：
+模型转换期间产生的下载缓存不纳入仓库，也不需要迁移：
 
 ```text
 models/.downloads/
 ```
+
+首次使用本仓库的 Windows 操作顺序：
+
+```powershell
+git lfs install
+git clone https://github.com/Jin-Zhenxi/local_Translate.git
+cd local_Translate
+git lfs pull
+Copy-Item config.ini.example config.ini
+```
+
+如果已经在本地 clone 过仓库，只需在仓库目录执行：
+
+```powershell
+git lfs install
+git lfs pull
+Copy-Item config.ini.example config.ini
+```
+
+Codex 接手本项目时，应先确认 `models/faster-whisper-base.en/` 和 `models/opus-mt-en-zh-int8/` 存在且包含模型文件。模型已经存在时，不要运行模型准备脚本；只有模型缺失时才运行 `prepare_asr_model.py` 或 `prepare_translation_model.py`。
 
 ### 关键配置
 
@@ -119,7 +139,7 @@ cd D:\Pyprojection\Translate\realtime-subtitle
 
 ### 准备模型
 
-如果项目中已经存在两个完整的运行模型目录，不需要重复下载。
+如果 Git LFS 已经获取两个完整的运行模型目录，不需要重复下载。只有模型缺失时才执行下面的准备命令。
 
 首次准备翻译模型：
 

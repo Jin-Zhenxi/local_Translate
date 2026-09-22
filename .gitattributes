@@ -1,0 +1,2 @@
+models/opus-mt-en-zh-int8/** filter=lfs diff=lfs merge=lfs -text
+models/faster-whisper-base.en/** filter=lfs diff=lfs merge=lfs -text
