@@ -1,5 +1,8 @@
 PyQt6
 faster-whisper
+ctranslate2>=4.8,<5
+sentencepiece>=0.2,<0.3
+huggingface-hub>=0.21,<2
 sounddevice
 numpy
 openai

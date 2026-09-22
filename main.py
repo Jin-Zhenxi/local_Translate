@@ -62,10 +62,11 @@ class Pipeline(QObject):
         # Initialize Translator
         print(f"[Pipeline] Initializing Translator (target={config.target_lang})...")
         self.translator = Translator(
+            model_path=config.translation_model_path,
             target_lang=config.target_lang,
-            base_url=config.api_base_url,
-            api_key=config.api_key,
-            model=config.model
+            device=config.translation_device,
+            compute_type=config.translation_compute_type,
+            inter_threads=config.translation_threads
         )
         
         # Warmup Transcriber (Critical for MLX/GPU)

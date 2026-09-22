@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 
 class Transcriber:
     def __init__(self, backend="whisper", model_size="base", device="cpu", compute_type="int8", language=None):
@@ -29,11 +30,12 @@ class Transcriber:
     def _init_whisper(self, model_size, device, compute_type):
         """Initialize faster-whisper backend"""
         from faster_whisper import WhisperModel
-        self.model = WhisperModel(model_size, device=device, compute_type=compute_type)
-        print(f"[Transcriber] Using faster-whisper (CPU/CUDA) with model: {model_size}")
+        local_model = Path(__file__).resolve().parent / "models" / f"faster-whisper-{model_size}"
+        model_source = str(local_model) if (local_model / "model.bin").is_file() else model_size
+        self.model = WhisperModel(model_source, device=device, compute_type=compute_type)
+        print(f"[Transcriber] Using faster-whisper (CPU/CUDA) with model: {model_source}")
     
     def _init_mlx(self, model_size):
-        sssss
         try:
             import mlx_whisper
             # MLX doesn't need explicit model loading here

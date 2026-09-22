@@ -1,5 +1,6 @@
 import configparser
 import os
+from pathlib import Path
 
 class Config:
     """Centralized configuration loaded from config.ini"""
@@ -26,6 +27,13 @@ class Config:
         self.model = self._get("translation", "model", "gpt-3.5-turbo")
         self.target_lang = self._get("translation", "target_lang", "Chinese")
         self.translation_threads = self._getint("translation", "threads", 4)
+        model_path = self._get("translation", "model_path", "models/opus-mt-en-zh-int8")
+        model_path = Path(model_path).expanduser()
+        if not model_path.is_absolute():
+            model_path = Path(__file__).resolve().parent / model_path
+        self.translation_model_path = model_path.resolve()
+        self.translation_device = self._get("translation", "device", "cpu")
+        self.translation_compute_type = self._get("translation", "compute_type", "int8")
         
         # Transcription settings
         self.asr_backend = self._get("transcription", "backend", "whisper").lower()
@@ -96,7 +104,15 @@ class Config:
                 if d['max_input_channels'] > 0 and 'blackhole' in d['name'].lower():
                     print(f"[Config] Auto-detected BlackHole device: [{i}] {d['name']}")
                     return i
-            print("[Config] BlackHole not found, using default input device")
+            default_input = sd.default.device[0]
+            if default_input is not None and int(default_input) >= 0:
+                default_input = int(default_input)
+                print(
+                    f"[Config] BlackHole not found, using default input device: "
+                    f"[{default_input}] {devices[default_input]['name']}"
+                )
+                return default_input
+            print("[Config] BlackHole and default input device not found")
             return None
         except Exception as e:
             print(f"[Config] Error detecting audio devices: {e}")
@@ -105,10 +121,9 @@ class Config:
     def print_config(self):
         """Print current configuration for debugging"""
         print("[Config] Current settings:")
-        print(f"  API Base URL: {self.api_base_url or '(default OpenAI)'}")
-        print(f"  API Key: {self.api_key[:8]}...{self.api_key[-4:] if len(self.api_key) > 12 else '***'}")
-        print(f"  Model: {self.model}")
         print(f"  Target Language: {self.target_lang}")
+        print(f"  Translation Model: {self.translation_model_path}")
+        print(f"  Translation Compute Type: {self.translation_compute_type}")
         print(f"  ASR Backend: {self.asr_backend}")
         print(f"  Whisper Model: {self.whisper_model}")
         print(f"  FunASR Model: {self.funasr_model}")

@@ -16,7 +16,7 @@ if %errorlevel% neq 0 (
 
 :: Create Virtual Environment
 if not exist .venv (
-    echo [1/3] Creating virtual environment (.venv)...
+    echo [1/3] Creating virtual environment .venv...
     python -m venv .venv
 ) else (
     echo [1/3] Virtual environment already exists.
@@ -48,7 +48,7 @@ reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" /s | findst
 if %errorlevel% neq 0 (
     echo.
     echo [WARNING] Virtual audio device is NOT installed.
-    echo VB-CABLE is required to capture system audio (e.g., from games, meetings, videos).
+    echo VB-CABLE is required to capture system audio, for example games, meetings, or videos.
     echo.
     echo Please download and install VB-CABLE from:
     echo   https://vb-audio.com/Cable/
@@ -59,7 +59,7 @@ if %errorlevel% neq 0 (
     echo   3. Or use Voicemeeter for advanced audio routing
     echo.
 ) else (
-    echo Virtual audio device (VB-Audio) found.
+    echo Virtual audio device VB-Audio found.
 )
 
 echo.

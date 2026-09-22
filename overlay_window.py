@@ -53,7 +53,7 @@ class OverlayWindow(QWidget):
         
         # Default height to full screen height if not specified
         screen_geometry = QApplication.primaryScreen().availableGeometry()
-        self.window_height = window_height if window_height else screen_geometry.height()
+        self.window_height = window_height if window_height else screen_geometry.height() // 2
         
         self.initUI()
         self.oldPos = self.pos()
@@ -125,7 +125,7 @@ class OverlayWindow(QWidget):
         
         # Default height to full screen height if not specified
         screen_geometry = QApplication.primaryScreen().availableGeometry()
-        self.window_height = window_height if window_height else screen_geometry.height()
+        self.window_height = window_height if window_height else screen_geometry.height() // 2
         
         self.initUI()
         self.oldPos = self.pos()
