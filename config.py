@@ -24,9 +24,8 @@ class Config:
         
         # Translation settings
         self.model = self._get("translation", "model", "gpt-3.5-turbo")
-        self.model = self._get("translation", "model", "gpt-3.5-turbo")
         self.target_lang = self._get("translation", "target_lang", "Chinese")
-        self.translation_threads = self._getint("translation", "threads", 4)
+        self.translation_threads = self._getint("translation", "threads", 1)
         model_path = self._get("translation", "model_path", "models/opus-mt-en-zh-int8")
         model_path = Path(model_path).expanduser()
         if not model_path.is_absolute():
@@ -37,14 +36,14 @@ class Config:
         
         # Transcription settings
         self.asr_backend = self._get("transcription", "backend", "whisper").lower()
-        self.whisper_model = self._get("transcription", "whisper_model", "base")
+        self.whisper_model = self._get("transcription", "whisper_model", "base.en")
         self.funasr_model = self._get("transcription", "funasr_model", "iic/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch")
         self.whisper_device = self._get("transcription", "device", "cpu")
         self.whisper_compute_type = self._get("transcription", "compute_type", "int8")
-        self.source_language = self._get("transcription", "source_language", "auto")
+        self.source_language = self._get("transcription", "source_language", "en")
         if self.source_language == "auto":
             self.source_language = None  # Whisper uses None for auto-detect
-        self.transcription_workers = self._getint("transcription", "transcription_workers", 2)
+        self.transcription_workers = self._getint("transcription", "transcription_workers", 1)
         
         # Audio settings
         self.sample_rate = self._getint("audio", "sample_rate", 16000)

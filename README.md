@@ -105,6 +105,8 @@ Copy-Item config.ini.example config.ini
 
 Codex 接手本项目时，应先确认 `models/faster-whisper-base.en/` 和 `models/opus-mt-en-zh-int8/` 存在且包含模型文件。模型已经存在时，不要运行模型准备脚本；只有模型缺失时才运行 `prepare_asr_model.py` 或 `prepare_translation_model.py`。
 
+仓库根目录的 `AGENTS.md` 提供了新机器上 Codex 的固定接手步骤。Windows 安装脚本也会自动创建缺失的 `config.ini`，并在模型缺失或仍为 LFS 指针时执行 `git lfs pull`。
+
 ### 关键配置
 
 `config.ini` 是本机配置并被 Git 忽略。核心设置应保持：

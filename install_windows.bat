@@ -14,6 +14,44 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
+:: Create the local configuration from the portable template.
+if not exist config.ini (
+    echo [Setup] Creating config.ini from config.ini.example...
+    copy /Y config.ini.example config.ini >nul
+)
+
+:: Ensure Git LFS materialized both runtime models.
+if not exist "models\faster-whisper-base.en\model.bin" goto fetch_models
+if not exist "models\opus-mt-en-zh-int8\model.bin" goto fetch_models
+for %%F in ("models\faster-whisper-base.en\model.bin") do if %%~zF LSS 1000000 goto fetch_models
+for %%F in ("models\opus-mt-en-zh-int8\model.bin") do if %%~zF LSS 1000000 goto fetch_models
+goto models_ready
+
+:fetch_models
+echo [Setup] Fetching runtime models with Git LFS...
+git lfs version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] Git LFS is required. Install Git for Windows with Git LFS, then run this installer again.
+    pause
+    exit /b 1
+)
+git lfs install
+git lfs pull
+if not exist "models\faster-whisper-base.en\model.bin" goto model_error
+if not exist "models\opus-mt-en-zh-int8\model.bin" goto model_error
+for %%F in ("models\faster-whisper-base.en\model.bin") do if %%~zF LSS 1000000 goto model_error
+for %%F in ("models\opus-mt-en-zh-int8\model.bin") do if %%~zF LSS 1000000 goto model_error
+goto models_ready
+
+:model_error
+echo [ERROR] Runtime models are missing or are still Git LFS pointer files.
+echo Run "git lfs pull" in this repository and try again.
+pause
+exit /b 1
+
+:models_ready
+echo [Setup] Runtime models are ready.
+
 :: Create Virtual Environment
 if not exist .venv (
     echo [1/3] Creating virtual environment .venv...

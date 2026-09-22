@@ -12,12 +12,12 @@ window_height = 120
 
 [transcription]
 backend = whisper
-whisper_model = base
+whisper_model = base.en
 funasr_model = iic/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch
-device = auto
-compute_type = float16
-source_language = auto
-transcription_workers = 4
+device = cpu
+compute_type = int8
+source_language = en
+transcription_workers = 1
 
 [audio]
 device_index = auto
