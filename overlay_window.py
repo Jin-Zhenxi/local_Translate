@@ -30,7 +30,7 @@ class LogItem(QFrame):
         # Original Text Label
         self.original_label = QLabel(f"[{timestamp}] {original_text}")
         self.original_label.setWordWrap(True)
-        self.original_label.setStyleSheet("color: #aaaaaa; font-family: Arial; font-size: 14px;")
+        self.original_label.setStyleSheet("color: rgba(255, 255, 255, 235); font-family: Arial; font-size: 14px;")
         self.layout.addWidget(self.original_label)
         
         # Translated Text Label
